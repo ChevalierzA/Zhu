@@ -1,0 +1,188 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+template <class K, class V>
+class Map
+{
+private:
+	K *arr1;
+	V *arr2;
+	int size;
+public:
+	Map();   //Default constructor, size = 0, pointers not initialized
+	Map(const K *A, const V *B, const int &size);  //Non-default constructor
+
+	Map(const Map<K, V> &m);  //Copy constructor
+	Map<K, V>& operator = (const Map<K, V> &m); //Assignment operator
+	~Map();   //Delete both arrays and set size = 0
+	V& operator [](const K &key) const;  
+
+	K& operator [](const V &value) const;
+
+	int getSize() const;
+	
+	void append(const K &key, const V &value);
+
+	template <class K, class V>
+	friend ostream& operator << (ostream &out, const Map<K, V> &m);
+};
+
+template <class K, class V>
+Map<K, V>::Map()
+{
+	this->size = 0;
+}
+
+template <class K, class V>
+Map<K, V>::Map(const K *A, const V *B, const int &size)
+{
+	this->size = size;
+	if (this->getSize() > 0)
+	{
+		this->arr1 = new K[this->getSize()];
+		this->arr2 = new V[this->getSize()];
+		for(int i = 0; i < this->getSize(); i++)
+		{
+			this->arr1[i] = A[i];
+			this->arr2[i] = B[i];
+		}
+	}
+}
+
+template <class K, class V>
+Map<K, V>::Map(const Map<K, V> &m)
+{
+	this->size = m.getSize();
+	if (this->getSize() > 0)
+	{
+		this->arr1 = new K[this->getSize()];
+		this->arr2 = new V[this->getSize()];
+		or (int i = 0; i < this->getSize(); i++)
+		{
+			this->arr1[i] = m.arr1[i];
+			this->arr2[i] = m.arr2[i];
+		}
+	}
+}
+
+template <class K, class V>
+Map<K, V>& Map<K, V>::operator = (const Map<K, V> &m)
+{
+	if(this == &m)
+		return *this;
+
+	this->~Map();
+
+	this->size = m.getSize();
+	if(this->getSize() > 0)
+	{
+		this->arr1 = new K[this->getSize()];
+		this->arr2 = new V[this->getSize()];
+		for(int i = 0; i < this->getSize(); i++)
+		{
+			this->arr1[i] = m.arr1[i];
+			this->arr2[i] = m.arr2[i];
+		}
+	}
+		return *this;
+}
+
+template <class K, class V>
+int Map<K, V>::getSize()const
+{
+	return this->size;
+}
+
+template <class K, class V>
+Map<K, V>::~Map()
+{
+	if(this->getSize() > 0)
+	{
+		delete[] this->arr1;
+		delete[] this->arr2;
+		this->size = 0;
+	}
+}
+
+template <class K, class V>
+V& Map<K, V>::operator[](const K &key) const
+{
+	int index = 0;
+	for(index; index < this->getSize(); index++)
+	{
+		if(this->arr1[index] == key)
+			break;
+		else
+			continue;
+	}
+	return this->arr2[index];
+}
+
+template <class K, class V>
+K& Map<K, V>::operator[](const V &key) const
+{
+	int index = 0;
+	for(index; index < this->getSize(); index++)
+	{
+		if(this->arr2[index] == key)
+			break;
+		else
+			continue;
+	}
+	return this->arr1[index];
+}
+
+template <class K, class V>
+void Map<K, V>::append(const K &key, const V &value)
+{
+	K *temp1 = new K[this->getSize() + 1];
+	V *temp2 = new V[this->getSize() + 1];
+
+	for(int i = 0; i < this->getSize(); i++)
+	{
+		temp1[i] = this->arr1[i];
+		temp2[i] = this->arr2[i];
+	}
+
+	temp1[this->getSize()] = key;
+	temp2[this->getSize()] = value;
+	
+	if (this->getSize() > 0)
+	{
+		delete[] this->arr1;
+		delete[] this->arr2;
+	}
+
+	this->arr1 = temp1;
+	this->arr2 = temp2;
+	this->size += 1;
+}
+
+template <class K, class V>
+ostream& operator << (ostream &out, const Map<K, V> &m)
+{
+	for(int i = 0; i < m.getSize(); i++)
+	{
+		out << m.arr1[i] << "    " << m.arr2[i] << endl;
+	}
+	return out;
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	Map<string, double> m1;
+	cout << "An empty map m1 is " << endl << m1 << endl;
+	string A[] = {"sara", "John", "James", "Peter", "Kate"};
+	double B[] = {87.5, 75.0, 98.0, 65.5, 70};
+	Map<string, double> m2(A, B, 5);
+	cout << "A non-empty map m2 is " << endl << m2 << endl;
+	cout << "m2[\"John\"] is " << m2["John"] << endl;
+	cout << "m2[65.5] is " << m2[65.5] << endl;
+	system("Pause");
+
+
+	return 0;
+}
