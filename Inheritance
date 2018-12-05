@@ -1,0 +1,508 @@
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+#include <string>
+
+class Employee
+{
+private:
+	string firstName, lastName, id;
+public:
+	//Constructors
+	Employee();
+	Employee(const string &f, const string &l, const string &id);
+	Employee(const Employee &e);
+
+	//Assignment Operator
+	Employee& operator = (const Employee &e);
+
+	//Getters
+	string getFirstName() const;
+	string getLastName() const;
+	string getId() const;
+
+	//Setters
+	void setFirstName(const string &firstName);
+	void setLastName(const string &LastName);
+	void setId(const string &Id);
+
+	//Friend functions
+	friend ostream& operator << (ostream &outs, const Employee &e);
+	friend istream& operator >> (istream &ins, Employee &e);
+	void printSalary();
+};
+
+
+#pragma once
+#include "stdafx.h"
+#include "Employee.h"
+
+Employee::Employee()
+{
+	this->setFirstName("");
+	this->setLastName("");
+	this->setId("");
+}
+
+Employee::Employee(const string &f, const string &l, const string &id)
+{
+	this->setFirstName(f);
+	this->setLastName(l);
+	this->setId(id);
+}
+
+Employee::Employee(const Employee&e)
+{
+	this->setFirstName(e.getFirstName());
+	this->setLastName(e.getLastName());
+	this->setId(e.getId());
+}
+
+Employee& Employee::operator=(const Employee &e)
+{
+	if(this == &e)
+		return *this;
+	this->setFirstName(e.getFirstName());
+	this->setLastName(e.getLastName());
+	this->setId(e.getId());
+	return *this;
+}
+
+string Employee::getFirstName() const
+{
+	return this->firstName;
+}
+
+string Employee::getLastName() const
+{
+	return this->lastName;
+}
+
+string Employee::getId() const
+{
+	return this->id;
+}
+
+void Employee::setFirstName(const string &firstName)
+{
+	this->firstName = firstName;
+}
+
+void Employee::setLastName(const string &lastName)
+{
+	this->lastName = lastName;
+}
+
+void Employee::setId(const string &id)
+{
+	this->id = id;
+}
+
+ostream& operator << (ostream &outs, const Employee &e)
+{
+	outs << e.getFirstName() << " " << e.getLastName() << " " << e.getId();
+	return outs;
+}
+
+istream& operator >> (istream &ins, Employee &e)
+{
+	string s;
+	cout << "\tEnter first name: ";
+	ins >> s;
+	e.setFirstName(s);
+	cout << "\tEnter Last name: ";
+	ins >> s;
+	e.setLastName(s);
+	cout << "\tEnter ID: ";
+	ins >> s;
+	e.setId(s);
+	return ins;
+}
+
+void Employee::printSalary()
+{
+cout << "Employee Salary = $76:" << endl;
+}
+
+
+#pragma once
+#include "stdafx.h"
+#include "Employee.h"
+
+class Manager : public Employee
+{
+private:
+	//Member variables belonging to Manager calss ONLY
+	Employee secretary;
+
+public:
+	//Constructors
+	Manager();
+	Manager(const string &, const string &, const string &, const Employee &);
+	Manager(const Manager &);
+
+	//Destructors
+
+	//Operator member functions
+	Manager& operator = (const Manager &);
+
+	//Getters
+	Employee getSecretary() const;
+
+	//Setters
+	void setSecretary(const Employee &);
+
+	//Friend functions
+	friend ostream& operator << (ostream &outs, const Manager &m);
+	friend istream& operator >> (istream &ins, Manager &m);
+
+	void printSalary();
+};
+
+#include "stdafx.h"
+#include "Manager.h"
+
+Manager::Manager() : Employee()
+{
+	this->setSecretary(Employee());
+}
+
+Manager::Manager(const string &f, const string &l, const string &id, const Employee &s) : Employee(f, l, id)
+{
+	this->setSecretary(s);
+}
+
+Manager::Manager(const Manager &m) : Employee(m)
+{
+	this->setSecretary(m.getSecretary());
+}
+
+Employee Manager::getSecretary() const
+{
+	return this->secretary;
+}
+
+void Manager::setSecretary(const Employee &secretary)
+{
+	this->secretary = secretary;
+}
+
+Manager& Manager::operator = (const Manager &m)
+{
+
+	if (this == &m)
+		return *this;
+	/*Employee e(m.getFirstName(), m.getLastName(), m.getId());
+	this->Employee::operator=(e);*/
+	this->Employee::operator = (m);
+	this->setSecretary(m.getSecretary());
+	return *this;
+}
+
+ostream& operator << (ostream& outs, const Manager &m)
+{
+	/*outs << m.getFirstName() << " " << m.getLastName() << " " << m.getId() << endl;*/
+	outs << static_cast<Employee>(m) << endl;
+	outs << "\t\tSecretary: ";
+	outs << m.getSecretary();
+	return outs;
+}
+
+istream& operator >> (istream &ins, Manager &m)
+{
+	Employee temp, secretary;
+	cout << "Reading in the Manager information" << endl;
+	ins >> temp;
+	cout << "Reading in the Secreatary information" << endl;
+	ins >> secretary;
+	m = Manager(temp.getFirstName(), temp.getLastName(), temp.getId(), secretary);
+	return ins;
+}
+
+void Manager::printSalary()
+{
+	cout << "Manager Salary = $760" << endl;
+}
+
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+#include <string>
+#include <math.h>
+#define _USE_MATH_DEFINES
+
+class Ellilpse
+{
+private:
+	double minorAxis, majorAxis;
+public:
+	Ellilpse();
+	Ellilpse(const double& min, const double& maj);
+	Ellilpse(const Ellilpse& e);
+	Ellilpse operator = (const Ellilpse& e);
+	double getMinorAxis() const;
+	double getMajorAxis() const;
+	void setMinorAxis(const double& min);
+	void setMajorAxis(const double& maj);
+	double getArea() const;
+	double getCircumference() const;
+	friend ostream& operator << (ostream& outs, const Ellilpse& e);
+	friend istream& operator >> (istream& ins, Ellilpse& e);
+};
+
+
+#pragma once
+#include "stdafx.h"
+#include "Ellipse.h"
+
+Ellilpse::Ellilpse()
+{
+	this->setMinorAxis(0.0);
+	this->setMajorAxis(0.0);
+}
+
+Ellilpse::Ellilpse(const double& min, const double& maj)
+{
+	this->setMinorAxis(min);
+	this->setMajorAxis(maj);
+}
+
+Ellilpse::Ellilpse(const Ellilpse& e)
+{
+	this->setMinorAxis(e.getMinorAxis());
+	this->setMajorAxis(e.getMajorAxis());
+}
+
+Ellilpse Ellilpse::operator = (const Ellilpse& e)
+{
+	this->setMinorAxis(e.getMinorAxis());
+	this->setMajorAxis(e.getMajorAxis());
+	return *this;
+}
+
+double Ellilpse::getMinorAxis() const
+{
+	return minorAxis;
+}
+
+double Ellilpse::getMajorAxis() const
+{
+	return majorAxis;
+}
+
+void Ellilpse::setMinorAxis(const double& min)
+{
+	this->minorAxis = min;
+}
+
+void Ellilpse::setMajorAxis(const double& maj)
+{
+	this->majorAxis = maj;
+}
+
+double Ellilpse::getArea() const
+{
+	double M_PI = 3.14159;
+	double a = M_PI * getMinorAxis() * getMajorAxis();
+	return a;
+}
+
+double Ellilpse::getCircumference() const
+{
+	double M_PI = 3.14159;
+	double c = 2 * M_PI * sqrt((pow(getMinorAxis(),2.0) + pow(getMajorAxis(),2.0)) / 2);
+	return c;
+}
+
+ostream& operator << (ostream& outs, const Ellilpse& e)
+{
+	outs << "minorAxis = " << e.getMinorAxis() << ", majorAxis = " << e.getMajorAxis() << endl; 
+	outs << "And Area of Ellilpse = " << e.getArea() << " , Circumference of Ellilpse = " << e.getCircumference() << endl;
+	return outs;
+}
+
+istream& operator >> (istream& ins, Ellilpse& e)
+{
+	double min, maj;
+	cout << "Enter the minorAxis: ";
+	ins >> min;
+	e.setMinorAxis(min);
+	cout << "Enter the majorAxis: ";
+	ins >> maj;
+	e.setMajorAxis(maj);
+	return ins;
+}
+
+
+#include "stdafx.h"
+#include "Ellipse.h"
+
+class Circle : public Ellilpse
+{
+private:
+public:
+	Circle();
+	Circle(const double& r);
+	Circle(const Circle& c);
+	Circle operator = (const Circle& c);
+	double getRadius() const;
+	void setRadius(const double& r);
+	void setMinorAxis(const double& r);
+	void setMajorAxis(const double& r);
+	friend ostream& operator << (ostream& outs, const Circle& e);
+	friend istream& operator >> (istream& ins, Circle& e);
+};
+
+
+#pragma once
+#include "stdafx.h"
+#include "Circle.h"
+
+Circle::Circle() : Ellilpse()
+{
+}
+Circle::Circle(const double& r)
+{
+	this->setRadius(r);
+}
+
+Circle::Circle(const Circle& c)
+{
+	this->setRadius(c.getRadius());
+}
+
+Circle Circle::operator = (const Circle& c)
+{
+	this->setRadius(c.getRadius());
+	return *this;
+}
+
+double Circle::getRadius() const
+{
+	double r = this->Ellilpse::getMinorAxis();
+	return r;
+}
+
+void Circle::setMajorAxis(const double& r)
+{
+	this->setRadius(r);
+}
+
+void Circle::setMinorAxis(const double& r)
+{
+	this->setRadius(r);
+}
+
+void Circle::setRadius(const double& r) 
+{
+	this->Ellilpse::setMajorAxis(r);
+	this->Ellilpse::setMinorAxis(r);
+}
+
+ostream& operator << (ostream& outs, const Circle& e)
+{
+	outs << "The radius = " << e.getRadius() << endl;
+	outs << "And Area of Circle = " << e.getArea() << " , Circumference of Circle = " << e.getCircumference() << endl;
+	return outs;
+}
+
+istream& operator >> (istream& ins, Circle& e)
+{
+	double r;
+	cout << "Enter the radius: " ;
+	ins >> r;
+	e.setRadius(r);
+	return ins;
+}
+
+
+#pragma once
+#include "stdafx.h"
+#include "Circle.h"
+
+class Cylinder : public Circle
+{
+private:
+	double height;
+public:
+	Cylinder();
+	Cylinder(const double &r, const double &h);
+	Cylinder(const Cylinder &c);
+	double getHeight() const;
+	void setHeight(const double &h);
+	Cylinder& operator = (const Cylinder &c);
+	double getArea() const;
+	double getVlume() const;
+
+	friend ostream& operator << (ostream& outs, const Cylinder &c);
+	friend istream& operator >> (istream& ins, Cylinder &c);
+};
+
+
+#pragma once
+#include "stdafx.h"
+#include "Cylinder.h"
+
+Cylinder::Cylinder(): Circle()
+{
+	this->setHeight(0);
+}
+
+Cylinder::Cylinder(const double &r, const double &h) : Circle(r)
+{
+	this->setHeight(h);
+}
+
+Cylinder::Cylinder(const Cylinder &c) : Circle(c.getRadius())
+{
+	this->setHeight(c.getHeight());
+}
+
+Cylinder& Cylinder::operator = (const Cylinder &c)
+{
+	this->Circle::operator = (c);
+	this->setHeight(c.getHeight());
+	return *this;
+}
+
+void Cylinder::setHeight(const double &h)
+{
+	this->height = h;
+}
+
+double Cylinder::getHeight() const
+{
+	return this->height;
+}
+
+double Cylinder::getArea() const
+{
+	double PI = 3.14159;
+	return PI * pow(this->getRadius(), 2.0) + 2 * PI * this->getRadius() * this->getHeight();
+}
+
+double Cylinder::getVlume()const
+{
+	double PI = 3.14159;
+	return PI * pow(this->getRadius(), 2.0) * this->getHeight();
+}
+
+istream& operator >> (istream& ins, Cylinder &c)
+{
+	double r,h;
+	cout << "Enter the radius of Cylinder: ";
+	cin >> r;
+	cout << endl;
+	cout << "Enter the height of Cylinder: ";
+	cin >> h;
+	cout << endl;
+	c.setRadius(r);
+	c.setHeight(h);
+}
+
+ostream& operator << (ostream& outs, const Cylinder &c)
+{
+	cout << "The radius of Cylinder : " << c.getRadius() << endl;
+	cout << "The height of Cylinder : " << c.getHeight() << endl;
+	cout << "The Area of Cylinder: " << c.getArea() << " And volume : " << c.getVlume() << endl;
+}
