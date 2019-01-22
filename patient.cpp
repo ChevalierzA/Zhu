@@ -39,7 +39,7 @@ Patient::Patient(string aCareCard) {
 	this->phone = "To be entered";
 	if (sizeof(aCareCard) <= 10)
 	{
-		this->careCard != "0000000000";
+		this->careCard = "0000000000";
 	}
 	else
 	this->careCard = aCareCard; 
