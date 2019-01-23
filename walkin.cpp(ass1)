@@ -40,7 +40,7 @@ void EnterPatient(List & list)
 	temp.setPhone(Phone);
 	temp.setEmail(Email);
 	list.insert(temp);
-	cout<<list.getElementCount()<<endl;
+	cout<<"New patient inserted!" <<endl;
 }
 
 
