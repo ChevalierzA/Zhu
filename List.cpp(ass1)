@@ -32,19 +32,13 @@ int  List::getElementCount() const
 // Precondition: newElement must not already be in data collection.  
 // Postcondition: newElement inserted and elementCount has been incremented.   
 bool List::insert(const Patient& newElement) {
-	if (search(newElement))
-		return false;
-	else if (this->elementCount>=this->capacity)
+	if (search(newElement) == NULL) 
 	{
-		return false;
-	}
-	else
-	{
-		elements[elementCount] = newElement;
+		this->elements[elementCount] = newElement;
 		this->elementCount++;
 		return true;
-
 	}
+	return false;
 }
 
 // Description: Remove an element. 
@@ -89,7 +83,7 @@ void List::removeAll() {
 //              otherwise, returns NULL.
 Patient* List::search(const Patient& target) {
 	Patient* p = this->elements;
-	for (int i = 0; i < this->elementCount; p++)
+	for (int i = 0; i < this->elementCount; i++,p++)
 		if (this->elements[i] == target)
 			return p;
 	return NULL;
