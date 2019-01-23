@@ -72,6 +72,8 @@ public:
 	//              Returns a pointer to the element if found,
 	//              otherwise, returns NULL.
 	Patient* search(const Patient& target);
-
+	
+	//Description: Sort list with increasing order
+	void sortList();
 
 }; // end List.h
