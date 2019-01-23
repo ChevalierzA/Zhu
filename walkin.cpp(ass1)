@@ -1,0 +1,160 @@
+/*
+ * walkIn.cpp
+ *
+ * Description: The main program to the users
+ *
+ * Author:Jiaqing Hu
+ * Date:2019/01/21
+ */
+
+#include "List.h"
+#include <iostream>
+using namespace std;
+
+
+//Create a list with n patients(entered by user)
+void EnterPatient(List & list)
+{
+
+	cout << "Enter the information of Patient" << endl;
+	string Name, Address, Phone, Email, careCard;
+	Patient temp;
+	cout << "Enter the Name: ";
+	cin >> Name;
+	cout << endl;
+	cout << "Enter the Address: ";
+	cin >> Address;
+	cout << endl;
+	cout << "Enter the Phone: ";
+	cin >> Phone;
+	cout << endl;
+	cout << "Enter the Email: ";
+	cin >> Email;
+	cout << endl;
+	cout << "Enter the careCard: ";
+	cin >> careCard;
+	cout << endl;
+	temp.setcareCard(careCard);
+	temp.setName(Name);
+	temp.setAddress(Address);
+	temp.setPhone(Phone);
+	temp.setEmail(Email);
+	list.insert(temp);
+	cout<<list.getElementCount()<<endl;
+}
+
+
+
+//Remove patient user entered
+void RemovePatient(List &list)
+{
+	string toBeRemoved;
+	bool flag;
+	cout << "Enter the patient number you want to remove: " << endl;
+	cin >> toBeRemoved;
+	for(int i = 0; i < list.getElementCount(); i++)
+	{
+		if(list.getElements(i).getCareCard() == toBeRemoved)
+			flag = list.remove(list.getElements(i));
+	}
+
+	if(flag)
+		cout << "Succeessfully removed the patient." << endl;
+	else
+		cout << "Error: Not Found." << endl;
+}
+
+
+//Traverse the list to find the patient user entered
+void SearchPatient(List &list) 
+{
+	string target;
+	bool flag = false;
+	cout << "Enter the patient number you want to search: " << endl;
+	cin >> target;
+	for(int i = 0; i < list.getElementCount(); i++)
+	{
+		if(list.getElements(i).getCareCard() == target)
+			flag = true;
+	}
+	 
+	if(flag)
+		cout << "Succeessfully find the patient with careCard:" << target << endl;
+	else
+		cout << "Error: Not Found." << endl;
+}
+
+
+//Modify patient with number of carecard which comes form user
+List ModifyPatient(List &list) 
+{
+	string target;
+	string target1;
+	int index = -1;
+	cout << "Enter the patient number you want to modify: " << endl;
+	cin >> target1;
+	for(int i = 0; i < list.getElementCount(); i++)
+	{
+		if(list.getElements(i).getCareCard() == target1)
+			index = i;
+	}
+	if(index == -1)
+		cout << "Error: Not Found." << endl;
+	else
+	{
+		int flag;
+		cout<<"What do you want to change?"<<endl;
+		cout<<"1.Address\t2.Name\t3.Phone\t4.Email"<<endl;
+		cin>>flag;
+		Patient temp = list.getElements(index);
+		switch(flag)
+		{
+		case 1 :cout<<"Enter new Address!"<<endl;cin>>target;temp.setAddress(target);break;
+		case 2 :cout<<"Enter new Name!"<<endl;cin>>target;temp.setName(target);break;
+		case 3 :cout<<"Enter new Phone!"<<endl;cin>>target;temp.setEmail(target);break;
+		case 4 :cout<<"Enter new Email!"<<endl;cin>>target;temp.setPhone(target);break;
+		default :cout<<"ERROR! Please enter a valid number!"<<endl;break;
+		}
+		list.modifyElement(temp,index);
+	}
+	return list;
+}
+
+//Print all patient from list
+void PrintPatient(List &list) 
+{
+	for(int i = 0; i < list.getElementCount(); i++)
+	{
+		cout << list.getElements(i);
+	}
+}
+
+
+//A switch-case block which allows user to select functions provided by program
+int main()
+{
+	List list;
+	int flag;
+	while(1)
+	{
+		cout<<"What do you want to do?"<<endl;
+		cout<<"1.CREATE A NEW PATIENT"<<endl;
+		cout<<"2.REMOVE PATIENT"<<endl;
+		cout<<"3.SEARCH PATIENT"<<endl;
+		cout<<"4.MODIFY PATIENT"<<endl;
+		cout<<"5.PRINT ALL PATIENT"<<endl;
+		cout<<"0.EXIT"<<endl;
+		cin >> flag;
+		cout << endl;
+		switch(flag)
+		{
+		case 0 : cout<<"BYE BYE";return 0;
+		case 1 : EnterPatient(list);break;
+		case 2 : RemovePatient(list);break;
+		case 3 : SearchPatient(list);break;
+		case 4 : ModifyPatient(list);break;
+		case 5 : PrintPatient(list);break;
+		default:cout<<"Please enter a valid number!"<<endl;break;
+		}
+	}
+}
