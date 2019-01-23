@@ -1,37 +1,47 @@
+/*
+ * Patient.h
+ *
+ * Class Description: Models a walk-in clinic patient.
+ * Class Invariant: Each patient has a unique care card number.
+ *                  This care card number must have 10 digits.
+ *                  This care card number cannot be modified.
+ *
+ * Author:Jiaqing Hu
+ * Date:2019/01/19
+ */
+
 #pragma once
 
-// You can add #include statements if you wish.
+ // You can add #include statements if you wish.
 #include <string>
 
 using namespace std;
 
 
-class Patient 
-{
-	
+class Patient {
+
 private:
-	string name;
+	string Name;
+	string careCard;
 	string address;
 	string phone;
 	string email;
-	string careCard;
 
-
-// There are plenty of hints in the provided files to help you complete this section.
+	// There are plenty of hints in the provided files to help you complete this section.
 
 public:
 
-/* 
- * You can add more methods to this public interface, 
- * but you cannot remove the methods below 
- * nor can you change their prototype.
- * 
- */
+	/*
+	 * You can add more methods to this public interface,
+	 * but you cannot remove the methods below
+	 * nor can you change their prototype.
+	 *
+	 */
 
-	// Default Constructor
-	// Description: Create a patient with a care card number of "0000000000". 
-	// Postcondition: All data members set to "To be entered", 
-	//                except the care card number which is set to "0000000000".       
+	 // Default Constructor
+	 // Description: Create a patient with a care card number of "0000000000". 
+	 // Postcondition: All data members set to "To be entered", 
+	 //                except the care card number which is set to "0000000000".       
 	Patient();
 
 	// Parameterized Constructor
@@ -52,9 +62,12 @@ public:
 
 	// Description: Returns patient's email.
 	string getEmail() const;
-	
+
 	// Description: Returns patient's care card.
 	string getCareCard() const;
+
+	//Description: Sets the patient's careCard
+	void setcareCard(const string acareCard);
 
 	// Description: Sets the patient's name.
 	void setName(const string aName);
@@ -77,12 +90,8 @@ public:
 	//              Returns true if the care card number of "this" Patient object is > the care card 
 	//              number of "rhs" Patient object.
 	bool operator > (const Patient & rhs);
-	
+
 	// Description: Prints the content of "this".
-    friend ostream & operator<<(ostream & os, const Patient & p);
-};
+	friend ostream & operator<<(ostream & os, const Patient & p);
 
-
-
-
-
+}; // end of Patient.h
