@@ -12,7 +12,6 @@
 
  // You can add #include statements if you wish.
 #include <iostream>
-#include <string>
 #include "Patient.h"
 
 // Default Constructor
@@ -73,6 +72,11 @@ string Patient::getCareCard() const {
 	return this->careCard;
 }
 
+//Description: Sets the patient's careCard
+void Patient::setcareCard(const string acareCard){
+	this->careCard = acareCard;
+}
+
 // Description: Sets the patient's name.
 void Patient::setName(const string aName) {
 	this->Name = aName;
@@ -96,13 +100,8 @@ void Patient::setEmail(const string anEmail) {
 // Description: Comparison operator. Compares "this" Patient object with "rhs" Patient object.
 //              Returns true if both Patient objects have the same care card number.
 bool Patient::operator == (const Patient & rhs) {
-
 	// Compare both Patient objects
-	if (this->careCard == rhs.getCareCard())
-		return true;
-	else
-		return false;
-
+	return this->careCard == rhs.getCareCard();
 } // end of operator ==
 
 // Description: Greater than operator. Compares "this" Patient object with "rhs" Patient object.
@@ -111,11 +110,7 @@ bool Patient::operator == (const Patient & rhs) {
 bool Patient::operator > (const Patient & rhs) {
 
 	// Compare both Patient objects
-	if (this->careCard > rhs.getCareCard())
-		return true;
-	else
-		return false;
-
+	return this->careCard > rhs.getCareCard();
 } // end of operator >
 
 
@@ -129,5 +124,3 @@ ostream & operator<<(ostream & os, const Patient & p) {
 } // end of operator<<
 
 // end of Patient.cpp
-
-//2345678901 - Patient: Marie Lower, 123 A Ave Vancouver, 778-123-1234, marie@somewhere.ca
