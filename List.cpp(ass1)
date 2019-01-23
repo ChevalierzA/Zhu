@@ -99,3 +99,23 @@ Patient List::getElements(int i) const
 void List::modifyElement(const Patient& target,const int index){
 	this->elements[index] = target;
 }
+
+//Description: Sort list with increasing order
+void List::sortList()
+{
+	int i,j,min;
+	if(this->elementCount <= 1)
+		return;
+	for(i = 0; i < this->elementCount-1; i++)
+	{
+		min = i;
+		for(j = i+1; j < this->elementCount; j++)
+		{
+			if(this->elements[j].getCareCard() < this->elements[min].getCareCard())
+				min = j;
+		}
+		Patient temp = this->elements[i];
+		this->elements[i] = this->elements[min];
+		this->elements[min] = temp;
+	}
+}
