@@ -79,9 +79,9 @@
      			leal (%edi, %edi, 2), %edi
 			leal (%eax, %edi, 4), %edi
 	
-	  20k:		leal (%edi, %edi, 4), %edi
-	  		mov %edi, %eax
-			leal %eax(%edi, %edi, 2), %edi
+	  20k:		mov $0, %eax
+	  		leal (%edi, %edi, 4), %edi
+			leal (%eax, %edi, 2), %edi
 	
 	  37k:		mov %edi, %eax
 	  		leal (%edi, %edi, 8), %edi
