@@ -73,3 +73,34 @@
 
 
   2.		
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  3.
+  
+  
+  	.globl sqrt
+sqrt:
+	movl $0, %eax   # place your code for Q3 here
+	mov  %edi, %ecx # Let ecx(temp1) store x
+	mov  %edi, %edx	# Let edx(temp2) store x
+	jp	loop		# jump to algorithm
+decs:
+	dec %rdx		# Decrease edx same as temp2--
+	mov %edx, %edi	# Using mov to change x to x--
+loop:	
+	mov  %edi, %eax # Let eax = x
+	imul %rdi, %rdi # Caculate eax*eax
+	cmp  %rdi, %rcx # Compare eax*eax to x 
+	jl	decs        # Jump to decs if eax*eax > x
+endl:	 
+	ret				#return eax
