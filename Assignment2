@@ -1,3 +1,5 @@
+							CMPT295 Assignment2	
+					Name: Zhu Zhuo                       ID:301329181	
 /*1.(a) 106:
 
 		106/2	53	0															
@@ -72,35 +74,15 @@
 		FA + AE = 90
 
 
-  2.		
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  3.
-  
-  
-  	.globl sqrt
-sqrt:
-	movl $0, %eax   # place your code for Q3 here
-	mov  %edi, %ecx # Let ecx(temp1) store x
-	mov  %edi, %edx	# Let edx(temp2) store x
-	jp	loop		# jump to algorithm
-decs:
-	dec %rdx		# Decrease edx same as temp2--
-	mov %edx, %edi	# Using mov to change x to x--
-loop:	
-	mov  %edi, %eax # Let eax = x
-	imul %rdi, %rdi # Caculate eax*eax
-	cmp  %rdi, %rcx # Compare eax*eax to x 
-	jl	decs        # Jump to decs if eax*eax > x
-endl:	 
-	ret				#return eax
+  2. (a). k = {2,3,5,9}
+     (b). 13k:		mov %edi, %eax
+     			leal (%edi, %edi, 2), %edi
+			leal (%eax, %edi, 4), %edi
+	
+	  20k:		leal (%edi, %edi, 4), %edi
+	  		mov %edi, %eax
+			leal %eax(%edi, %edi, 2), %edi
+	
+	  37k:		mov %edi, %eax
+	  		leal (%edi, %edi, 8), %edi
+			leal (%eax, %edi, 4), %edi
