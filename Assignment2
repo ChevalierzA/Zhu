@@ -86,3 +86,25 @@
 	  37k:		mov %edi, %eax
 	  		leal (%edi, %edi, 8), %edi
 			leal (%eax, %edi, 4), %edi
+
+
+
+
+3.   	.globl sqrt
+sqrt:
+	movl $0x0, %eax   # place your code for Q3 here
+	movl $0x10000000o, %ecx
+loop:
+	movl %ecx, %edx
+	imul %edx, %edx
+	cmp %rdx, %rdi
+	jl shift
+xor:
+	xor	%ecx, %eax
+shift:
+	shr %ecx
+	cmp $0, %rcx
+	je endl
+	jp loop
+endl:
+	ret
