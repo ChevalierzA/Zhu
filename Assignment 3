@@ -1,0 +1,27 @@
+	.globl conv
+conv:
+	dec %edx
+	mov %rdx, %r8
+	cmp $0, %edx
+	je loop
+index:	
+	dec %edx
+	popq %rsi
+	cmp $0, %edx
+	jne index
+loop:
+	mov %esi, %eax 
+	imul %rdi, %rcx
+	add %rcx, %rax
+	cmp $0, %r8
+	je endl
+	pushq %rsi
+	mov %rsi, %rcx
+	popq %rdi 
+	dec %r8
+	jmp loop
+endl:
+	jne endl
+	mov $1, %r8
+	movb (%rax, %r8), %al	
+	ret
