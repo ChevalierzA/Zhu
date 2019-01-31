@@ -1,0 +1,149 @@
+lab4:
+
+	.file	"p1.c"
+	.text
+	.section	.rodata.str1.8,"aMS",@progbits,1
+	.align 8
+.LC0:
+	.string	"The product of %d and %d is %d."
+	.text
+	.p2align 4,,15
+	.globl	proc1
+	.type	proc1, @function
+proc1:
+.LFB23:
+	.cfi_startproc
+	pushq	%r13
+	.cfi_def_cfa_offset 16
+	.cfi_offset 13, -16
+	pushq	%r12
+	.cfi_def_cfa_offset 24
+	.cfi_offset 12, -24
+	movq	%rdi, %r13
+	pushq	%rbp
+	.cfi_def_cfa_offset 32
+	.cfi_offset 6, -32
+	pushq	%rbx
+	.cfi_def_cfa_offset 40
+	.cfi_offset 3, -40
+	movq	%rsi, %rbp
+	movq	%rdx, %rbx
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 48
+	movl	(%rsi), %r12d
+	movl	(%rdx), %esi
+	movl	%r12d, %edi
+	call	proc2
+	subq	$8, %rsp
+	.cfi_def_cfa_offset 56
+	movl	(%rbx), %r9d
+	movq	%r13, %rdi
+	pushq	%rax
+	.cfi_def_cfa_offset 64
+	movl	0(%rbp), %r8d
+	movl	$.LC0, %ecx
+	movq	$-1, %rdx
+	movl	$1, %esi
+	xorl	%eax, %eax
+	call	__sprintf_chk
+	movl	(%rbx), %eax
+	subl	$2, %eax
+	movl	%eax, 0(%rbp)
+	movl	%r12d, (%rbx)
+	addq	$24, %rsp
+	.cfi_def_cfa_offset 40
+	popq	%rbx
+	.cfi_def_cfa_offset 32
+	popq	%rbp
+	.cfi_def_cfa_offset 24
+	popq	%r12
+	.cfi_def_cfa_offset 16
+	popq	%r13
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE23:
+	.size	proc1, .-proc1
+	.ident	"GCC: (Ubuntu 7.4.0-1ubuntu1~16.04~ppa1) 7.4.0"
+	.section	.note.GNU-stack,"",@progbits
+  
+  
+  
+  
+  
+  
+  p2.s
+  	.file	"p2.c"
+	.text
+	.p2align 4,,15
+	.globl	proc2
+	.type	proc2, @function
+proc2:
+.LFB0:
+	.cfi_startproc
+	imull	%esi, %edi
+	leal	-12(%rdi), %eax
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	proc2, .-proc2
+	.ident	"GCC: (Ubuntu 7.4.0-1ubuntu1~16.04~ppa1) 7.4.0"
+	.section	.note.GNU-stack,"",@progbits
+  
+  
+  main.s
+  .file	"main.c"
+	.text
+	.section	.rodata.str1.8,"aMS",@progbits,1
+	.align 8
+.LC0:
+	.string	"Original values are: x=%d, y=%d.\n"
+	.align 8
+.LC1:
+	.string	"Final values are: x=%d, y=%d.\n"
+	.section	.text.startup,"ax",@progbits
+	.p2align 4,,15
+	.globl	main
+	.type	main, @function
+main:
+.LFB23:
+	.cfi_startproc
+	subq	$72, %rsp
+	.cfi_def_cfa_offset 80
+	movl	$9, %ecx
+	movl	$6, %edx
+	movq	%fs:40, %rax
+	movq	%rax, 56(%rsp)
+	xorl	%eax, %eax
+	movl	$.LC0, %esi
+	movl	$1, %edi
+	movl	$6, 8(%rsp)
+	movl	$9, 12(%rsp)
+	call	__printf_chk
+	leaq	12(%rsp), %rdx
+	leaq	8(%rsp), %rsi
+	leaq	16(%rsp), %rdi
+	call	proc1
+	movl	12(%rsp), %ecx
+	movl	8(%rsp), %edx
+	movl	$.LC1, %esi
+	movl	$1, %edi
+	xorl	%eax, %eax
+	call	__printf_chk
+	leaq	16(%rsp), %rdi
+	call	puts
+	movq	56(%rsp), %rax
+	xorq	%fs:40, %rax
+	jne	.L5
+	addq	$72, %rsp
+	.cfi_remember_state
+	.cfi_def_cfa_offset 8
+	ret
+.L5:
+	.cfi_restore_state
+	call	__stack_chk_fail
+	.cfi_endproc
+  
+  
+  
+  
