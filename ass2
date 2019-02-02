@@ -1,0 +1,97 @@
+#include "Stack.h"
+#include <iostream>
+#include <cstddef>
+
+
+using namespace std;
+
+Stack::Stack()
+{
+    this->head = nullptr;
+    this->tail = nullptr;
+}
+
+Stack::~Stack()
+{
+    this->head = nullptr;
+    this->tail = nullptr;
+}
+
+void Stack::push(int x)
+{
+    if(head == nullptr)
+    {
+        StackNode* temp = new StackNode;
+        temp->data = x;
+        temp->next = nullptr;
+        head = temp;
+        tail = temp->next;
+    }
+    else
+    {
+        Stack iter;
+        iter.head = this->head;
+        StackNode* temp = new StackNode;
+        temp->data = x;
+        head = temp;
+        temp->next = iter.head;
+    }
+}
+
+int Stack::pop()
+{
+    if(head == nullptr)
+    {
+        cout << "Wopps! Stack is empty" << endl;
+        system("exit");
+    }
+    else if(head-> next == nullptr)
+    {
+        int temp = head->data;
+        tail = head ->next;
+        head = head -> next;
+        return temp;
+    }
+    else
+    {
+        int temp = head->data;
+        head = head -> next;
+        return temp;
+    }
+}
+
+
+int Stack::peek()const 
+{
+    if(head == nullptr)
+    {
+        cout << "Wopps! Stack is empty" << endl;
+        system("exit");
+    }
+    else if(head->next == nullptr)
+    {
+        return head->data;
+    }
+    else
+    {
+        Stack iter;
+        iter.head = head->next;
+        int temp = head->data;
+        for(iter.head; iter.head->next != nullptr; iter.head = iter.head->next)
+        {
+            if(iter.head->data >= temp)
+                temp = iter.head->data;
+        }
+        return temp;
+    }
+}
+
+bool Stack::isEmpty()const
+{
+    if(head == nullptr)
+        return true;
+    else
+        return false;
+}
+
+
