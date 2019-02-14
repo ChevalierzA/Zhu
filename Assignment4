@@ -1,0 +1,68 @@
+	.globl conv_arr
+	# %rdi - signal
+	# %rsi - N
+	# %rdx - h
+	# %rcx - M
+	# %r8 - result + 4
+	# %r10 - i
+	# %r11 - n+m-2
+	# %r12 - ladj
+	# %r13 - radj
+
+conv_arr:
+
+	movq $0, %rax 	    #rax = 0		
+	movq $0, %r10 		# i = 0
+	movq %rcx, %r11		#r11 = m	
+	addq %rsi, %r11		#r11 = m+n
+	subq $2, %r11		#r11 = m+n-2
+loop:
+	cmp %r11, %r10		# i : m+n-2
+	jg endl
+	pushq %rsi			# save N 				
+	movq %rcx, %rsi		# second arg = m
+	incq %r10			# i+1
+	pushq %rdi
+	movq %r10, %rdi		# first arg = i+1
+	call min
+	popq %rdi			
+	pushq %rax			
+	popq %r12			# r12(ladj) = min(i+1, m)			
+	movq %r10, %r13     # r13 = i+1
+	movq %r11, %r14		# r14 = m+n-2
+	subq %r13, %r14		# r14 = m+n-2-(i+1)	
+	movq %r14, %r13		# r13 = m+n-2-(i+1)		
+	addq $2, %r13		# r13 = m+n-(i+1)
+	pushq %rdi	
+	pushq %r13			
+	popq %rdi			# first arg = m+n-(i+1)
+	call min
+	popq %rdi
+	popq %rsi			
+	pushq %rax				
+	popq %r13			# r13 = min(m+n-(i+1), m)
+	movq %rcx, %r14		# r14 = m
+	subq %r13, %r14		# r14 = m - min(m+n-(i+1),m)
+	movq %r14, %r13		# r13(radj) = r14 = m - min(m+n-(i+1),m)
+	movq %r12, %r15		# r15 = ladj
+	subq %r13, %r15		# r15 = ladj - radj
+	movq %r10, %r14		# r14 = i+1
+	subq %r12, %r14		# r14 = (i+1) - ladj
+	pushq %rsi 
+	movq %rdx, %rsi
+	pushq %rdx			
+	movq %rdi, %rdx
+	pushq %rdi
+	movq (%rdx,%r14), %rdi 	# x + ((i+1)-ladj)
+	movq (%rsi,%r13), %rsi	# h + radj
+	movq %r15, %rdx				# 3th arg = ladj - radj 
+	call conv
+	popq %rdi
+	popq %rdx
+	popq %rsi 					
+	pushq %rax
+	popq %r8
+	jmp loop
+endl:
+	movq %r8, %rax
+	ret
