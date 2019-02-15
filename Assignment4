@@ -1,55 +1,71 @@
+.globl conv_arr
+	# %rdi - signal
+	# %rsi - N
+	# %rdx - h
+	# %rcx - M
+	# %r8 - result + 4
+	# %r10 - i
+	# %r11 - n+m-2
+	# %r12 - ladj
+	# %r13 - radj
+
 conv_arr:
 
 	movq $0, %rax 	    #rax = 0		
 	movq $0, %r10 		# i = 0
-	movq (%rsi,%rcx), %r11	#r11 = m+n
+	movq %rsi, %r11		
+	addq %rcx, %r11 	#r11 = m+n
 	subq $2, %r11		#r11 = m+n-2
 loop:
 	cmp %r11, %r10		# i : m+n-2
-	jge endl
-	pushq %rsi			# save N 				
+	jg endl
+	pushq %rsi			# saved N 				
 	movq %rcx, %rsi		# second arg = m
+	movq %r10, %r9		# r9 = i
 	incq %r10			# i+1
-	pushq %rdi
+	pushq %rdi			# saved signal
 	movq %r10, %rdi		# first arg = i+1
-	call min
-	popq %rdi			
-	pushq %rax			
+	call min			# call min()
+	popq %rdi			# restore signal	
+	pushq %rax			# saved min(i+1, m)
 	popq %r12			# r12(ladj) = min(i+1, m)			
-	movq %r10, %r13     # r13 = i+1
-	movq %r11, %r14		# r14 = m+n-2
-	subq %r13, %r14		# r14 = m+n-2-(i+1)	
-	movq %r14, %r13		# r13 = m+n-2-(i+1)		
-	addq $2, %r13		# r13 = m+n-(i+1)
-	pushq %rdi	
+	xorq %rax, %rax 	# rax = 0
+	movq %r10, %r14     # r14 = i+1
+	movq %r11, %r13		# r13 = m+n-2
+	addq $2,%r13		# r13 = m+n
+	subq %r14, %r13		# r13 = m+n-(i+1)			
+	pushq %rdi			# saved signal
 	movq %r13, %rdi		# first arg = m+n-(i+1)
-	call min
-	popq %rdi
-	popq %rsi			
-	pushq %rax				
+	call min			# call min()
+	popq %rdi			# restore signal
+	popq %rsi			# restore N	
+	pushq %rax			# saved min(m+n-(i+1), m)	
 	popq %r13			# r13 = min(m+n-(i+1), m)
-	movq %rcx, %r14		# r14 = m
-	subq %r13, %r14		# r14 = m - min(m+n-(i+1),m)
-	movq %r14, %r13		# r13(radj) = r14 = m - min(m+n-(i+1),m)
+	xorq %rax, %rax		# rax = 0
+	movq %rcx, %r15 	# r15 = m
+	subq %r13, %r15		
+	movq %r15, %r13		# r13(radj) = m - min(m+n-(i+1),m)		
 	movq %r12, %r15		# r15 = ladj
 	subq %r13, %r15		# r15 = ladj - radj
 	movq %r10, %r14		# r14 = i+1
 	subq %r12, %r14		# r14 = (i+1) - ladj
-	pushq %rsi 
-	movq %rdx, %rsi
-	pushq %rdx			
-	movq %rdi, %rdx
-	pushq %rdi
-	movq (%rdx,%r14), %rdi 	# x + ((i+1)-ladj)
-	movq (%rsi,%r13), %rsi	# h + radj
-	movq %r15, %rdx				# 3th arg = ladj - radj 
-	call conv
-	popq %rdi
-	popq %rdx
-	popq %rsi 					
-	pushq %rax
-	popq %r8
+	pushq %rsi 			# saved N
+	movq %rdx, %rsi		# 2th arg = h
+	pushq %rdx			# saved h
+	movq %rdi, %rdx	 	# rdx = signal
+	pushq %rdi			# saved signal
+	leaq (%rdx, %r14, 1), %rdi 		# 1th arg = x + ((i+1)-ladj)
+	movq %r15, %rdx					# 3th arg = ladj - radj
+	leaq (%rsi, %r13, 1), %rsi 		# 2th arg = h + radj
+	pushq %rcx
+	call conv 			# call conv()
+	popq %rcx			# restore m
+	popq %rdi			# restore signal
+	popq %rdx			# restore h
+	popq %rsi			# restore n
+	movb %al,(%r8, %r9) # result[i] = al
+	xorq %rax, %rax		# rax = 0
+test5:				
 	jmp loop
 endl:
-	movq %r8, %rax
 	ret
