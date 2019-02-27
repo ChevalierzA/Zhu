@@ -1,0 +1,293 @@
+
+
+// Class Invariant:  FIFO order
+ 
+
+/* None of the provided code (basecode) may be modified. */
+
+
+#pragma once
+
+#include "Node.h"
+#include "EmptyDataCollectionException.h"
+
+#include <cstdio>
+
+using namespace std;
+
+template <class T>
+class Queue {
+private:
+    static int const INITIAL_SIZE = 1;
+    T* arr = new T[INITIAL_SIZE];
+    int capacity;
+    int front;
+    int back;
+    int size;
+public:
+
+        // Desc: Constructor. (O(1))
+        Queue();
+
+
+        // Desc: Returns true if Queue is empty. (O(1))
+        bool isEmpty() const;
+
+   
+        // Desc: Inserts x at the "back" of this Queue. (O(1))
+        void enqueue(const T& x);
+
+   
+        // Desc: Removes the element at the "front". (O(1))
+        //  Pre: Queue not empty.
+        //       Throws EmptyDataCollectionException if Queue empty.
+        void dequeue() throw(EmptyDataCollectionException);
+   
+
+        // Desc: Returns the element at the "front". (O(1))
+        //  Pre: Queue not empty.
+        //       Throws EmptyDataCollectionException if Queue empty.
+        // Post: Queue is unchanged.
+        T& peek() const throw(EmptyDataCollectionException);  
+
+
+
+        /* you may add more methods */
+
+
+};
+
+
+// Desc: Constructor. (O(1))
+template <class T>
+Queue<T>::Queue() {
+    size = 0; 
+    capacity = INITIAL_SIZE;
+    front = 0;
+    back = 0;
+} // constructor
+
+
+
+// Desc: Returns true if Queue is empty. (O(1))
+template <class T>
+bool Queue<T>::isEmpty() const {
+    return size == 0;
+} // isEmpty
+
+
+
+// Desc: Inserts x at the "back" of this Queue. (O(1))
+template <class T>
+void Queue<T>::enqueue(const T& x) {
+    if(size >= capacity){
+    capacity++;
+    T *temp = new T[capacity];
+    for(int i = 0; i < back; i++)
+        temp[i] = arr[i];
+    delete [] arr;
+    arr = temp;
+    arr[back++] = x;
+    }
+    else{
+        arr[back++] = x;
+    }
+    size++;
+} // enqueue
+
+
+
+// Desc: Removes the element at the "front". (O(1))
+//  Pre: Queue not empty.
+//       Throws EmptyDataCollectionException if Queue empty.
+template <class T>
+void Queue<T>::dequeue() throw(EmptyDataCollectionException) {
+    if(isEmpty())
+    {
+        cout << "Queue is empty.";
+        return;
+    }
+    int i = 0;
+    while(i < back)
+    {
+        arr[i++] = arr[i+1];
+    }
+    back--;
+    size--;
+} // dequeue
+
+
+
+// Desc: Returns the element at the "front". (O(1))
+//  Pre: Queue not empty.
+//       Throws EmptyDataCollectionException if Queue empty.
+// Post: Queue is unchanged.
+template <class T>
+T& Queue<T>::peek() const throw(EmptyDataCollectionException) {
+    return arr[front];
+} // peek
+
+
+
+
+/*
+ * PriorityQueue.h
+ *
+ * Description: Priority Queue
+ * Class Invariant: The elements stored in this Priority Queue are always sorted.
+ *
+ * Author: Inspired by Frank M. Carrano and Tim Henry (textbook).
+ * Modified: February 2019
+ *
+ */
+
+
+
+/* None of the provided code (basecode) may be modified. */
+
+
+
+#pragma once
+
+#include "Node.h"
+#include "EmptyDataCollectionException.h"
+
+#include <cstdio>
+
+using namespace std;
+
+
+template <class T>
+class PriorityQueue {
+
+    private:
+        // singly-linked list
+        Node<T>* head;
+        int len;
+
+
+        /* You may add private methods to this class */
+
+
+    public:
+        // Desc: Default Constructor. (O(1))
+        PriorityQueue();
+ 
+
+        // Desc: Copy Constructor. (O(N))
+        PriorityQueue(const PriorityQueue& rhs);
+
+
+        // Desc: Destructor. (O(N))
+        ~PriorityQueue();
+
+
+        // Desc: Returns true if Priority Queue empty. (O(1))
+        bool isEmpty() const;
+
+
+        // Desc: Returns length of the Priority Queue. (O(1))
+        int getLength() const;
+
+
+        // Desc: Inserts x in sorted order. (O(N))
+        //  Pre: Priority Queue is sorted.
+        // Post: Priority Queue remains sorted.
+        void enqueue(const T& x);
+    
+
+        // Desc: Removes the element with "highest" priority. (O(1))
+        //  Pre: Priority Queue not empty.
+        //       Throws EmptyDataCollectionException if Priority Queue empty.
+        void dequeue() throw(EmptyDataCollectionException);
+
+
+        // Desc: Returns the element with the "highest" priority. (O(1))
+        //  Pre: Priority Queue not empty.
+        //       Throws EmptyDataCollectionException if Priority Queue empty.
+        // Post: Priority Queue is unchanged.
+        T& peek() const throw(EmptyDataCollectionException);
+
+}; // PriorityQueue
+
+template <class T>
+PriorityQueue<T>::PriorityQueue(){
+    head = nullptr;
+    len = 0;
+}
+
+template <class T>
+PriorityQueue<T>::PriorityQueue(const PriorityQueue& rhs){
+    head = rhs.head;
+    len = rhs.len;
+}
+
+template <class T>
+PriorityQueue<T>::~PriorityQueue()
+{
+    
+}
+
+
+
+
+
+
+#include "Event.h"
+
+Event::Event()
+{
+    this->time = 0;
+    this->length = 0;
+}
+
+Event::Even(const int& t, const int& l, const EvenType& tp)
+{
+    this->time = t;
+    this->length = l;
+    this->type = tp;
+}
+
+int Event::GetTime() const
+{
+    return this->time;
+}
+
+int Event::GetLength() const
+{
+    return this->length;
+}
+
+EvenType Event::GetType()const
+{
+    return this->type;
+}
+
+void Event::SetTime(const int& t)
+{
+    this->time = t;
+}
+
+void Event::SetLength(const int& l)
+{
+    this->length = l;
+}
+
+ void Event::SetType (const EventType& tp)
+ {
+    this->type = tp;
+ }
+
+ friend ostream& operator << (ostream& outs, const Event& e)
+ {
+    if(e.type == arrival)
+        outs << "Arrival Event ";
+    else
+        outs << "Departure Event ";
+    outs << e.time;
+    outs << e.length;
+    return outs;
+ }
+
+
+
