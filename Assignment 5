@@ -13,3 +13,37 @@ loop:
 endloop:
 	pop	%rbp
 	ret
+
+
+
+
+
+
+
+sum_float:
+	pushq   %rbp
+	xorps	%xmm0, %xmm0            # total <- 0.0
+	xorq    %r8, %r8				# i = 0
+	addq    $1, %r8
+	movq	(%rsp), %rbp
+	movq    0x7F800000, %rbp
+loop:
+	cmpq	%rsi, %r8
+	jg		endloop
+	movq	%rdi, %r9
+	movq	%rsp, %r10
+	movq	%rsp, %r11
+	cmovge	%r9, %r10
+	cmovge  %r9, %r11
+	add    %r9, %r11
+	cmpq	0x7F800000, %rbp
+	je      lp1
+	add	$8, %rbp
+lp1:
+	movq	%r11, %rbp
+	incq	%r8
+	add		$4, %rdi
+	jmp		loop
+endloop:
+	pop	%rbp
+	ret
