@@ -18,32 +18,47 @@ endloop:
 
 
 
-
-
-sum_float:
-	pushq   %rbp
-	xorps	%xmm0, %xmm0            # total <- 0.0
-	xorq    %r8, %r8				# i = 0
-	addq    $1, %r8
-	movq	(%rsp), %rbp
-	movq    0x7F800000, %rbp
+break2:
+	pushq	%r10
+	movq	%rsp, %rbp
+	addq	$8, %rbp
 loop:
 	cmpq	%rsi, %r8
 	jg		endloop
-	movq	%rdi, %r9
-	movq	%rsp, %r10
-	movq	%rsp, %r11
-	cmovge	%r9, %r10
-	cmovge  %r9, %r11
-	add    %r9, %r11
-	cmpq	0x7F800000, %rbp
-	je      lp1
-	add	$8, %rbp
-lp1:
-	movq	%r11, %rbp
-	incq	%r8
+	cmp		%rdi, %rbp
+	jg		deQF1
+	vmovss  (%rbp), %xmm9
+	subq	$8, %rbp
+	jmp		compare
+deQF1:
+	vmovss  (%rdi), %xmm9
 	add		$4, %rdi
+compare:
+	cmp		%rdi, %rbp
+	jg		deQF2
+	vmovss	(%rbp), %xmm10
+	subq	$8, %rbp
+	jmp		addxy
+deQF2:
+	vmovss	(%rdi), %xmm10
+	add		$4, %rdi
+addxy:
+	addss   %xmm9, %xmm10
+	cmpq	$0x7F800000, %rbp
+	je		DeQ
+lp1:
+	movq	%xmm10, %r9
+	pushq	%r9
+	subq	$8, %rbp
 	jmp		loop
 endloop:
+	vmovss (%rbp),%xmm0
 	pop	%rbp
 	ret
+
+DeQ:
+	popq	%r9
+	movq	%xmm10, %r9
+	pushq	%r9
+	subq	$8, %rbp
+	jmp		lp1
