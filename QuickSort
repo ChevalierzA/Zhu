@@ -19,14 +19,16 @@ of pivot */
 int partition (int arr[], int low, int high) 
 { 
 	int pivot = arr[low]; // pivot 
-	int left = low + 1;
-  	int right = high;
+	int left = low;
+  	int right = high + 1;
 	while(left < right)
     {
+      left++;
       while(arr[left] < pivot)
       {
         left++;
       }
+      right--;
       while(arr[right] > pivot)
       {
         right--;
