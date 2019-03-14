@@ -22,18 +22,19 @@ int partition (int arr[], int low, int high)
 	int left = low;
   	int right = high + 1;
 	while(left < right)
-    {
-      left++;
-      while(arr[left] < pivot)
+     {
+      	left++;
+      	while(arr[left] < pivot && left < right)
       {
         left++;
       }
       right--;
-      while(arr[right] > pivot)
+      while(arr[right] > pivot && left < right)
       {
         right--;
       }
-      swap(&arr[left], &arr[right]);
+      if(left < right)
+     	 swap(&arr[left], &arr[right]);
     }
 	swap(&arr[left - 1], &arr[low]); 
 	return left - 1; 
