@@ -1,0 +1,165 @@
+	.file	"rank.c"
+	.text
+	.p2align 4,,15
+	.globl	compute_ranks
+	.type	compute_ranks, @function
+compute_ranks:
+.LFB0:
+	.cfi_startproc
+	cmpl	$1, %esi
+	pushq	%r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	pushq	%r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	pushq	%r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	pushq	%rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	pushq	%rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	jle	.L22
+	leal	-2(%rsi), %r14d
+	xorl	%ebp, %ebp
+	shrl	%r14d
+	movl	%r14d, %eax
+	leaq	8(,%rax,8), %r13
+	leal	-1(%rsi), %eax
+	leaq	4(%rdi,%rax,4), %r12
+	.p2align 4,,10
+	.p2align 3
+.L9:
+	testl	%esi, %esi
+	movss	(%rdi,%rbp), %xmm1
+	movss	4(%rdi,%rbp), %xmm2
+	jle	.L23
+	movq	%rdi, %rax
+	movl	$1, %r10d
+	movl	$1, %r11d
+	.p2align 4,,10
+	.p2align 3
+.L8:
+	movss	(%rax), %xmm0
+	xorl	%ebx, %ebx
+	ucomiss	%xmm1, %xmm0
+	seta	%bl
+	addl	%ebx, %r11d
+	xorl	%ebx, %ebx
+	ucomiss	%xmm2, %xmm0
+	seta	%bl
+	addq	$4, %rax
+	addl	%ebx, %r10d
+	cmpq	%r12, %rax
+	jne	.L8
+.L3:
+	movl	%r11d, (%rdx,%rbp)
+	movl	%r10d, 4(%rdx,%rbp)
+	addq	$8, %rbp
+	cmpq	%r13, %rbp
+	jne	.L9
+	leal	2(%r14,%r14), %ebx
+.L2:
+	cmpl	%ebx, %esi
+	jle	.L10
+	leal	-1(%rsi), %eax
+	leaq	4(%rdi), %r13
+	movslq	%ebx, %rbx
+	leaq	0(%r13,%rax,4), %rbp
+	movq	%rax, %r12
+.L14:
+	movss	(%rdi,%rbx,4), %xmm1
+	movq	%rdi, %rax
+	movl	$1, %r10d
+	.p2align 4,,10
+	.p2align 3
+.L13:
+	movss	(%rax), %xmm0
+	xorl	%r11d, %r11d
+	ucomiss	%xmm1, %xmm0
+	seta	%r11b
+	addq	$4, %rax
+	addl	%r11d, %r10d
+	cmpq	%rbp, %rax
+	jne	.L13
+	movl	%r10d, (%rdx,%rbx,4)
+	addq	$1, %rbx
+	cmpl	%ebx, %esi
+	jg	.L14
+.L15:
+	pxor	%xmm2, %xmm2
+	leaq	0(%r13,%r12,4), %rdx
+	xorl	%eax, %eax
+	pxor	%xmm1, %xmm1
+	.p2align 4,,10
+	.p2align 3
+.L19:
+	movss	(%rdi), %xmm0
+	ucomiss	.LC1(%rip), %xmm0
+	addss	%xmm0, %xmm1
+	jb	.L17
+	addss	%xmm0, %xmm2
+	addl	$1, %eax
+.L17:
+	addq	$4, %rdi
+	cmpq	%rdi, %rdx
+	jne	.L19
+	pxor	%xmm0, %xmm0
+	testl	%eax, %eax
+	cvtsi2ss	%esi, %xmm0
+	divss	%xmm0, %xmm1
+	je	.L16
+	pxor	%xmm0, %xmm0
+	cvtsi2ss	%eax, %xmm0
+	divss	%xmm0, %xmm2
+.L16:
+	popq	%rbx
+	.cfi_remember_state
+	.cfi_def_cfa_offset 40
+	movl	%eax, (%r9)
+	movss	%xmm2, (%r8)
+	popq	%rbp
+	.cfi_def_cfa_offset 32
+	movss	%xmm1, (%rcx)
+	popq	%r12
+	.cfi_def_cfa_offset 24
+	popq	%r13
+	.cfi_def_cfa_offset 16
+	popq	%r14
+	.cfi_def_cfa_offset 8
+	ret
+	.p2align 4,,10
+	.p2align 3
+.L23:
+	.cfi_restore_state
+	movl	$1, %r10d
+	movl	$1, %r11d
+	jmp	.L3
+	.p2align 4,,10
+	.p2align 3
+.L10:
+	testl	%esi, %esi
+	jle	.L24
+	leal	-1(%rsi), %r12d
+	leaq	4(%rdi), %r13
+	jmp	.L15
+.L24:
+	xorl	%eax, %eax
+	pxor	%xmm1, %xmm1
+	pxor	%xmm2, %xmm2
+	jmp	.L16
+.L22:
+	xorl	%ebx, %ebx
+	jmp	.L2
+	.cfi_endproc
+.LFE0:
+	.size	compute_ranks, .-compute_ranks
+	.section	.rodata.cst4,"aM",@progbits,4
+	.align 4
+.LC1:
+	.long	1112014848
+	.ident	"GCC: (Ubuntu 7.4.0-1ubuntu1~16.04~ppa1) 7.4.0"
+	.section	.note.GNU-stack,"",@progbits
