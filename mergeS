@@ -1,0 +1,56 @@
+/*void mergeSort(int *Rank, float* Grade, int L, int R)
+{
+    if(L < R)
+    {
+        int M = (L+R)/2;
+        mergeSort(Rank, Grade, L, M);
+        mergeSort(Rank, Grade, M+1, R);
+        merge(Rank, Grade, L, M, R);
+    }
+}
+
+
+void merge(int *Rank, float* Grade, int L, int M, int R)
+{
+    int i,j,k;
+    int n1 = M-L+1;
+    int n2 = R-M;
+
+    int Lr[n1], Rr[n2];
+    float Lf[n1], Rf[n2];
+
+    for(i = 0; i < n1; i++)
+    {
+        Lr[i] = Rank[L + i];
+        Lf[i] = Grade[L + i];
+    }
+    for(j = 0; j < n2; j++)
+    {
+        Rr[j] = Rank[M + 1 + j];
+        Rf[j] = Grade[M + 1 + j];
+    }
+    i = 0;
+    j = 0;
+    k = L;
+    while(i < n1 && j < n2)
+    {
+        if(Lf[i] <= Rf[j])
+        {
+            Rank[k++] = Lr[i++];
+        }
+        else
+        {
+            Rank[k++] = Rr[j++];
+        }
+    }
+
+    while(i < n1)
+    {
+        Rank[k++] = Lr[i++];
+    }
+    while(j < n2)
+    {
+        Rank[k++] = Rr[j++];
+    }
+
+}*/
